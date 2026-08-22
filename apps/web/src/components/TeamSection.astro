@@ -1,0 +1,148 @@
+---
+import { Icon } from 'astro-icon/components';
+import { homePage as localHomePage, teamMembers as localTeamMembers } from '../data/site';
+import type { HomePageContent, TeamMember } from '../data/types';
+import { optimizedImageSrc, optimizedImageSrcSet } from '../lib/images';
+
+interface Props {
+  content?: HomePageContent;
+  members?: TeamMember[];
+}
+
+const { content = localHomePage, members = localTeamMembers } = Astro.props;
+---
+
+<section class="section section--sand team" aria-labelledby="team-title">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">{content.team.eyebrow}</span>
+        <h2 id="team-title">{content.team.title}</h2>
+      </div>
+      <p>{content.team.description}</p>
+    </div>
+
+    <div class="team-grid">
+      {members.map((member) => (
+        <article class="team-card">
+          <div class="team-photo">
+            <img
+              src={optimizedImageSrc(member.photo.src)}
+              srcset={optimizedImageSrcSet(member.photo.src)}
+              sizes="(max-width: 520px) calc(100vw - 30px), (max-width: 720px) 38vw, 25vw"
+              alt={member.photo.alt}
+              width="640"
+              height="760"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="team-copy">
+            <span>{member.role}</span>
+            <h3>{member.name}</h3>
+            <p>{member.bio}</p>
+            <div class="team-meta"><Icon name="lucide:badge-check" size={18} aria-hidden="true" /> Responsável técnico</div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px;
+  }
+
+  .team-card {
+    display: grid;
+    grid-template-columns: minmax(180px, 0.72fr) minmax(0, 1.28fr);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--white);
+  }
+
+  .team-photo {
+    min-height: 370px;
+    background: var(--white);
+  }
+
+  .team-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .team-copy {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: clamp(24px, 3vw, 38px);
+  }
+
+  .team-copy > span {
+    margin-bottom: 10px;
+    color: var(--brand-orange-dark);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin-bottom: 18px;
+  }
+
+  p {
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+  }
+
+  .team-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    color: var(--olive-accent);
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+
+  @media (max-width: 1060px) {
+    .team-card {
+      grid-template-columns: 1fr;
+    }
+
+    .team-photo {
+      min-height: 420px;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .team-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .team-card {
+      grid-template-columns: minmax(140px, 0.75fr) minmax(0, 1.25fr);
+    }
+
+    .team-photo {
+      min-height: 360px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .team-card {
+      grid-template-columns: 1fr;
+    }
+
+    .team-photo {
+      min-height: 390px;
+    }
+  }
+</style>

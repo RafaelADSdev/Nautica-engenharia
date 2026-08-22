@@ -1,0 +1,182 @@
+---
+import { Icon } from 'astro-icon/components';
+import { homePage as localHomePage } from '../data/site';
+import type { HomePageContent } from '../data/types';
+import { optimizedImageSrc, optimizedImageSrcSet } from '../lib/images';
+
+interface Props {
+  content?: HomePageContent;
+}
+
+const { content = localHomePage } = Astro.props;
+const aboutSrc = optimizedImageSrc(content.about.image.src);
+const aboutSrcSet = optimizedImageSrcSet(content.about.image.src);
+---
+
+<section class="section about" id="quem-somos" aria-labelledby="about-title">
+  <div class="container about-grid">
+    <div class="about-media">
+      <img
+        src={aboutSrc}
+        srcset={aboutSrcSet}
+        sizes="(max-width: 860px) calc(100vw - 28px), 48vw"
+        alt={content.about.image.alt}
+        width="820"
+        height="920"
+        loading="lazy"
+        decoding="async"
+      />
+      <div class="about-seal" aria-label="Mais de 10 anos de atuação">
+        <strong>10+</strong>
+        <span>anos de<br />experiência</span>
+      </div>
+    </div>
+
+    <div class="about-copy">
+      <span class="eyebrow">{content.about.eyebrow}</span>
+      <h2 id="about-title">{content.about.title}</h2>
+      {content.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+
+      <ul class="about-pillars" aria-label="Compromissos da Náutica Engenharia">
+        <li><Icon name="lucide:clipboard-check" size={23} aria-hidden="true" /><span><strong>Planejamento</strong> para cada frente de serviço</span></li>
+        <li><Icon name="lucide:hard-hat" size={23} aria-hidden="true" /><span><strong>Execução técnica</strong> com equipe especializada</span></li>
+        <li><Icon name="lucide:map-pin" size={23} aria-hidden="true" /><span><strong>Presença regional</strong> em cinco estados</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: clamp(48px, 8vw, 110px);
+  }
+
+  .about {
+    overflow: hidden;
+  }
+
+  .about-media {
+    position: relative;
+  }
+
+  .about-media::before {
+    position: absolute;
+    z-index: -1;
+    right: -24px;
+    bottom: -24px;
+    width: 66%;
+    height: 74%;
+    border-radius: var(--radius-lg);
+    background: var(--brand-orange-soft);
+    content: '';
+  }
+
+  .about-media img {
+    width: 100%;
+    min-height: 540px;
+    max-height: 690px;
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .about-seal {
+    position: absolute;
+    right: -30px;
+    bottom: 34px;
+    display: grid;
+    width: 154px;
+    height: 154px;
+    place-content: center;
+    border: 8px solid var(--white);
+    border-radius: 50%;
+    color: var(--white);
+    background: var(--brand-orange-dark);
+    text-align: center;
+  }
+
+  .about-seal strong {
+    font-family: 'Lemon Milk', 'Montserrat', sans-serif;
+    font-size: 2.55rem;
+    line-height: 1;
+  }
+
+  .about-seal span {
+    margin-top: 5px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1.25;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin-bottom: 28px;
+  }
+
+  .about-copy > p {
+    max-width: 680px;
+    color: var(--ink-muted);
+    font-size: 1.03rem;
+  }
+
+  .about-pillars {
+    display: grid;
+    gap: 0;
+    padding: 0;
+    margin: 34px 0 0;
+    list-style: none;
+  }
+
+  .about-pillars li {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .about-pillars :global(svg) {
+    color: var(--brand-orange-dark);
+  }
+
+  .about-pillars span {
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+  }
+
+  .about-pillars strong {
+    color: var(--graphite);
+  }
+
+  @media (max-width: 860px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .about-media {
+      max-width: 620px;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .about-media img {
+      min-height: 410px;
+    }
+
+    .about-seal {
+      right: -5px;
+      bottom: -26px;
+      width: 124px;
+      height: 124px;
+      border-width: 6px;
+    }
+
+    .about-seal strong {
+      font-size: 2rem;
+    }
+  }
+</style>

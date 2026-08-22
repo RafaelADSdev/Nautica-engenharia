@@ -1,0 +1,260 @@
+---
+import { Icon } from 'astro-icon/components';
+import { homePage as localHomePage, partnerCategories, partners as localPartners } from '../data/site';
+import type { HomePageContent, Partner } from '../data/types';
+import { optimizedImageSrc } from '../lib/images';
+
+interface Props {
+  content?: HomePageContent;
+  items?: Partner[];
+}
+
+const { content = localHomePage, items = localPartners } = Astro.props;
+
+const filters = [
+  { key: 'all', label: 'Todos', icon: 'lucide:layout-grid' },
+  ...partnerCategories,
+];
+---
+
+<section class="section partners" id="parceiros" aria-labelledby="partners-title">
+  <div class="container">
+    <div class="partners-heading">
+      <div>
+        <span class="eyebrow">{content.partners.eyebrow}</span>
+        <h2 id="partners-title">{content.partners.title}</h2>
+      </div>
+      <p>{content.partners.description}</p>
+    </div>
+
+    <div class="partner-filters" role="group" aria-label="Filtrar parceiros por setor" data-partner-filters>
+      {filters.map((filter, index) => (
+        <button
+          type="button"
+          data-filter={filter.key}
+          aria-pressed={index === 0 ? 'true' : 'false'}
+        >
+          <Icon name={filter.icon} size={17} aria-hidden="true" />
+          {filter.label}
+        </button>
+      ))}
+    </div>
+
+    <p class="partner-status sr-only" aria-live="polite" data-partner-status>{items.length} parceiros exibidos</p>
+    <div class="partner-grid" data-partner-grid>
+      {items.map((partner) => (
+        <article class="partner-card" data-partner-card data-category={partner.category}>
+          <div class="logo-frame">
+            <img src={optimizedImageSrc(partner.logo.src, 320)} alt={partner.logo.alt} width="320" height="190" loading="lazy" decoding="async" />
+          </div>
+          <span>{partner.name}</span>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const filterGroup = document.querySelector('[data-partner-filters]');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-partner-card]'));
+  const status = document.querySelector('[data-partner-status]');
+
+  filterGroup?.addEventListener('click', (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('button[data-filter]');
+    if (!button || !filterGroup.contains(button)) return;
+
+    const filter = button.dataset.filter ?? 'all';
+    filterGroup.querySelectorAll('button').forEach((candidate) => {
+      candidate.setAttribute('aria-pressed', String(candidate === button));
+    });
+
+    let visible = 0;
+    cards.forEach((card) => {
+      const matches = filter === 'all' || card.dataset.category === filter;
+      card.hidden = !matches;
+      if (matches) visible += 1;
+    });
+
+    if (status) status.textContent = `${visible} ${visible === 1 ? 'parceiro exibido' : 'parceiros exibidos'}`;
+  });
+</script>
+
+<style>
+  .partners {
+    position: relative;
+    overflow: hidden;
+    color: rgb(255 255 255 / 74%);
+    background:
+      radial-gradient(circle at 8% 10%, rgb(91 102 0 / 38%), transparent 29%),
+      linear-gradient(135deg, var(--olive), #252800);
+  }
+
+  .partners::after {
+    position: absolute;
+    top: -260px;
+    right: -230px;
+    width: 600px;
+    height: 600px;
+    border: 1px solid rgb(255 255 255 / 8%);
+    border-radius: 50%;
+    content: '';
+  }
+
+  .partners-heading {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+    align-items: end;
+    gap: 48px;
+    margin-bottom: 34px;
+  }
+
+  .eyebrow {
+    color: #ffb29c;
+  }
+
+  h2 {
+    max-width: 760px;
+    margin-bottom: 0;
+    color: var(--white);
+  }
+
+  .partners-heading p {
+    margin-bottom: 4px;
+  }
+
+  .partner-filters {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 30px;
+  }
+
+  .partner-filters button {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 15px;
+    border: 1px solid rgb(255 255 255 / 20%);
+    border-radius: 999px;
+    color: var(--white);
+    background: rgb(255 255 255 / 7%);
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 800;
+    transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  }
+
+  .partner-filters button:hover {
+    transform: translateY(-2px);
+    border-color: rgb(255 255 255 / 45%);
+  }
+
+  .partner-filters button[aria-pressed='true'] {
+    border-color: var(--brand-orange-dark);
+    background: var(--brand-orange-dark);
+  }
+
+  .partner-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .partner-card {
+    display: grid;
+    min-width: 0;
+    align-content: start;
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 10%);
+    border-radius: var(--radius-sm);
+    color: var(--graphite);
+    background: var(--white);
+    box-shadow: 0 12px 34px rgb(0 0 0 / 10%);
+    transition:
+      transform var(--transition),
+      border-color var(--transition),
+      box-shadow var(--transition);
+  }
+
+  .partner-card:hover {
+    transform: translateY(-6px);
+    border-color: rgb(255 255 255 / 28%);
+    box-shadow: 0 18px 44px rgb(0 0 0 / 18%);
+  }
+
+  .partner-card[hidden] {
+    display: none;
+  }
+
+  .logo-frame {
+    display: grid;
+    aspect-ratio: 1.45 / 1;
+    place-items: center;
+    padding: clamp(16px, 2.4vw, 28px);
+    background: var(--white);
+  }
+
+  .partner-card img {
+    width: 100%;
+    max-width: 170px;
+    height: 82px;
+    object-fit: contain;
+    transition: transform var(--transition);
+  }
+
+  .partner-card:hover img {
+    transform: scale(1.06);
+  }
+
+  .partner-card > span {
+    min-width: 0;
+    padding: 12px 14px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-muted);
+    font-size: 0.7rem;
+    font-weight: 800;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  @media (max-width: 1020px) {
+    .partner-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 820px) {
+    .partners-heading {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .partner-filters {
+      flex-wrap: nowrap;
+      padding-bottom: 8px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .partner-filters button {
+      flex: 0 0 auto;
+    }
+
+    .partner-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .partner-card img {
+      height: 70px;
+    }
+  }
+</style>

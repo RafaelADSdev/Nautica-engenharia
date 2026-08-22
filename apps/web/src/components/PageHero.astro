@@ -1,0 +1,157 @@
+---
+import { Icon } from 'astro-icon/components';
+import Breadcrumbs from './Breadcrumbs.astro';
+import ButtonLink from './ButtonLink.astro';
+import { optimizedImageSrc, optimizedImageSrcSet } from '../lib/images';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  summary: string;
+  image: { src: string; alt: string };
+  icon?: string;
+  breadcrumbs: Array<{ label: string; href?: string }>;
+  ctaHref?: string;
+  ctaLabel?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  summary,
+  image,
+  icon = 'lucide:hard-hat',
+  breadcrumbs,
+  ctaHref,
+  ctaLabel = 'Conversar sobre este projeto',
+} = Astro.props;
+const compactTitle = title.length >= 17 && !title.includes(' ');
+const heroSrc = optimizedImageSrc(image.src);
+const heroSrcSet = optimizedImageSrcSet(image.src);
+---
+
+<section class="page-hero" aria-labelledby="page-title">
+  <img
+    class="page-hero-image"
+    src={heroSrc}
+    srcset={heroSrcSet}
+    sizes="100vw"
+    alt={image.alt}
+    width="1920"
+    height="960"
+    loading="eager"
+    decoding="async"
+    fetchpriority="high"
+  />
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-grid" aria-hidden="true"></div>
+  <div class="container page-hero-inner">
+    <Breadcrumbs items={breadcrumbs} light />
+    <div class:list={['page-hero-copy', { 'page-hero-copy--compact': compactTitle }]}>
+      <span class="page-eyebrow"><Icon name={icon} size={20} aria-hidden="true" /> {eyebrow}</span>
+      <h1 id="page-title">{title}</h1>
+      <p>{summary}</p>
+      {ctaHref && <ButtonLink href={ctaHref} label={ctaLabel} external icon="whatsapp" />}
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    min-height: min(720px, 82svh);
+    overflow: hidden;
+    color: var(--white);
+    background: var(--graphite);
+  }
+
+  .page-hero-image,
+  .page-hero-overlay,
+  .page-hero-grid {
+    position: absolute;
+    inset: 0;
+  }
+
+  .page-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .page-hero-overlay {
+    background:
+      linear-gradient(90deg, rgb(23 26 0 / 96%) 0%, rgb(23 26 0 / 80%) 48%, rgb(23 26 0 / 24%) 100%),
+      linear-gradient(0deg, rgb(45 45 48 / 58%), transparent 55%);
+  }
+
+  .page-hero-grid {
+    opacity: 0.12;
+    background-image: linear-gradient(90deg, rgb(255 255 255 / 55%) 1px, transparent 1px);
+    background-size: 25% 100%;
+  }
+
+  .page-hero-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-height: min(720px, 82svh);
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 44px;
+    padding-block: 150px 70px;
+  }
+
+  .page-hero-copy {
+    width: 100%;
+    min-width: 0;
+    max-width: 930px;
+  }
+
+  .page-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+    color: #ffb29c;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin-bottom: 24px;
+    color: var(--white);
+    font-size: clamp(2.65rem, 6vw, 5.8rem);
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  p {
+    max-width: 740px;
+    margin-bottom: 30px;
+    color: rgb(255 255 255 / 80%);
+    font-size: clamp(1rem, 1.4vw, 1.18rem);
+  }
+
+  @media (max-width: 620px) {
+    .page-hero,
+    .page-hero-inner {
+      min-height: 720px;
+    }
+
+    .page-hero-overlay {
+      background: linear-gradient(0deg, rgb(23 26 0 / 96%), rgb(23 26 0 / 64%));
+    }
+
+    .page-hero-inner {
+      padding-block: 130px 42px;
+    }
+
+    .page-hero-copy--compact h1 {
+      font-size: 2rem;
+      overflow-wrap: normal;
+    }
+  }
+</style>

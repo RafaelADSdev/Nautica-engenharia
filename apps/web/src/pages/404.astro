@@ -1,0 +1,74 @@
+---
+import { Icon } from 'astro-icon/components';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ButtonLink from '../components/ButtonLink.astro';
+---
+
+<BaseLayout title="Página não encontrada" description="A página solicitada não foi encontrada." noIndex>
+  <section class="not-found">
+    <div class="not-found-grid" aria-hidden="true"></div>
+    <div class="container not-found-inner">
+      <Icon name="lucide:construction" size={44} aria-hidden="true" />
+      <span>Erro 404</span>
+      <h1>Esta rota não faz parte da obra.</h1>
+      <p>O endereço pode ter mudado ou sido digitado incorretamente. Volte à página inicial para continuar navegando.</p>
+      <ButtonLink href="/" label="Voltar ao início" variant="light" icon="lucide:arrow-left" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    position: relative;
+    min-height: 78svh;
+    overflow: hidden;
+    color: var(--white);
+    background: var(--graphite);
+  }
+
+  .not-found-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.12;
+    background-image:
+      linear-gradient(90deg, transparent calc(100% - 1px), white 1px),
+      linear-gradient(transparent calc(100% - 1px), white 1px);
+    background-size: 180px 100%, 100% 140px;
+  }
+
+  .not-found-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-height: 78svh;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: 150px 80px;
+  }
+
+  .not-found-inner > :global(svg) {
+    margin-bottom: 24px;
+    color: var(--brand-orange);
+  }
+
+  .not-found-inner > span {
+    color: #ffb29c;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-width: 850px;
+    margin: 14px 0 22px;
+    color: var(--white);
+  }
+
+  p {
+    max-width: 660px;
+    margin-bottom: 30px;
+    color: rgb(255 255 255 / 75%);
+  }
+</style>

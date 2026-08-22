@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeHero from '../components/HomeHero.astro';
+import TrustMetrics from '../components/TrustMetrics.astro';
+import AboutSection from '../components/AboutSection.astro';
+import TeamSection from '../components/TeamSection.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import CasesSection from '../components/CasesSection.astro';
+import PartnersSection from '../components/PartnersSection.astro';
+import CoverageSection from '../components/CoverageSection.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { getSiteContent } from '../lib/content';
+
+const content = await getSiteContent();
+const { homePage, services, caseCategories, partners, teamMembers, siteSettings } = content;
+const metrics = [
+  ...homePage.stats,
+  { value: String(partners.length), label: 'marcas apresentadas no portfólio' },
+].slice(0, 4);
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: siteSettings.legalName,
+  url: siteSettings.siteUrl,
+  logo: 'https://www.nauticaengenharia.com/assets/brand/logo-nautica.png',
+  email: siteSettings.email,
+  telephone: `+${siteSettings.whatsapp.number.replace(/\D/g, '')}`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${siteSettings.address.street}, ${siteSettings.address.number}`,
+    addressLocality: siteSettings.address.city,
+    addressRegion: siteSettings.address.state,
+    addressCountry: 'BR',
+  },
+};
+---
+
+<BaseLayout
+  title="Náutica Engenharia"
+  description={homePage.seo.description}
+  image="/og.png"
+  imageAlt="Náutica Engenharia — soluções que protegem estruturas"
+  schema={organizationSchema}
+>
+  <HomeHero content={homePage} />
+  <TrustMetrics metrics={metrics} />
+  <AboutSection content={homePage} />
+  <TeamSection content={homePage} members={teamMembers} />
+
+  <section class="section services-section" id="servicos" aria-labelledby="services-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">{homePage.services.eyebrow}</span>
+          <h2 id="services-title">{homePage.services.title}</h2>
+        </div>
+        <p>{homePage.services.description}</p>
+      </div>
+      <div class="service-grid">
+        {services.map((service, index) => <ServiceCard service={service} index={index} />)}
+      </div>
+    </div>
+  </section>
+
+  <CasesSection content={homePage} categories={caseCategories} />
+  <PartnersSection content={homePage} items={partners} />
+  <CoverageSection content={homePage} states={siteSettings.states} />
+  <FinalCta content={homePage.finalCta} />
+</BaseLayout>
+
+<style>
+  .services-section {
+    background:
+      linear-gradient(90deg, transparent 49.95%, rgb(45 45 48 / 4%) 50%, transparent 50.05%),
+      var(--sand);
+    background-size: 240px 100%;
+  }
+
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .service-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .service-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

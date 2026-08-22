@@ -1,0 +1,6 @@
+packages:
+  - "apps/*"
+allowBuilds:
+  esbuild: true
+minimumReleaseAgeExclude:
+  - '@iconify-json/lucide@1.2.125'

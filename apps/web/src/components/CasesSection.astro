@@ -1,0 +1,54 @@
+---
+import ButtonLink from './ButtonLink.astro';
+import CaseCard from './CaseCard.astro';
+import { caseCategories as localCategories, homePage as localHomePage } from '../data/site';
+import type { CaseCategory, HomePageContent } from '../data/types';
+
+interface Props {
+  content?: HomePageContent;
+  categories?: CaseCategory[];
+}
+
+const { content = localHomePage, categories = localCategories } = Astro.props;
+---
+
+<section class="section cases" id="cases" aria-labelledby="cases-title">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">{content.cases.eyebrow}</span>
+        <h2 id="cases-title">{content.cases.title}</h2>
+      </div>
+      <div class="cases-intro">
+        <p>{content.cases.description}</p>
+        <ButtonLink href="/cases-industria" label="Explorar cases" variant="ghost" icon="lucide:arrow-right" />
+      </div>
+    </div>
+
+    <div class="cases-grid">
+      {categories.map((category, index) => <CaseCard category={category} featured={index === 0} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cases {
+    background: var(--white);
+  }
+
+  .cases-intro p {
+    margin-bottom: 18px;
+  }
+
+  .cases-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 720px) {
+    .cases-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

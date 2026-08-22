@@ -1,0 +1,300 @@
+import {defineArrayMember, defineField, defineType} from 'sanity'
+
+const caseCategories = [
+  {title: 'Condomínios', value: 'condominios'},
+  {title: 'Hospitais', value: 'hospitais'},
+  {title: 'Indústria', value: 'industria'},
+  {title: 'Varejo', value: 'varejo'},
+]
+
+export const homePage = defineType({
+  name: 'homePage',
+  title: 'Página inicial',
+  type: 'document',
+  groups: [
+    {name: 'hero', title: 'Hero'},
+    {name: 'content', title: 'Conteúdo'},
+    {name: 'order', title: 'Ordem'},
+    {name: 'seo', title: 'SEO'},
+  ],
+  fields: [
+    defineField({
+      name: 'hero',
+      title: 'Abertura',
+      type: 'object',
+      group: 'hero',
+      fields: [
+        defineField({
+          name: 'eyebrow',
+          title: 'Chamada curta',
+          type: 'string',
+          validation: (Rule) => Rule.max(60),
+        }),
+        defineField({
+          name: 'title',
+          title: 'Título',
+          type: 'string',
+          validation: (Rule) => Rule.required().min(15).max(100),
+        }),
+        defineField({
+          name: 'summary',
+          title: 'Resumo',
+          type: 'text',
+          rows: 4,
+          validation: (Rule) => Rule.required().min(30).max(320),
+        }),
+        defineField({
+          name: 'image',
+          title: 'Foto principal',
+          type: 'imageWithAlt',
+          validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+          name: 'ctaLabel',
+          title: 'Texto do botão',
+          type: 'string',
+          validation: (Rule) => Rule.required().max(40),
+        }),
+        defineField({
+          name: 'ctaHref',
+          title: 'Destino do botão',
+          type: 'string',
+          description: 'Aceita uma âncora interna ou uma URL HTTPS.',
+          validation: (Rule) => Rule.required().max(300),
+        }),
+      ],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'indicators',
+      title: 'Indicadores de confiança',
+      type: 'array',
+      group: 'content',
+      validation: (Rule) => Rule.required().min(2).max(4),
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'indicator',
+          fields: [
+            defineField({
+              name: 'value',
+              title: 'Valor',
+              type: 'string',
+              validation: (Rule) => Rule.required().max(30),
+            }),
+            defineField({
+              name: 'label',
+              title: 'Legenda',
+              type: 'string',
+              validation: (Rule) => Rule.required().max(80),
+            }),
+          ],
+          preview: {select: {title: 'value', subtitle: 'label'}},
+        }),
+      ],
+    }),
+    defineField({
+      name: 'about',
+      title: 'Quem somos',
+      type: 'object',
+      group: 'content',
+      fields: [
+        defineField({
+          name: 'heading',
+          title: 'Título',
+          type: 'string',
+          validation: (Rule) => Rule.required().max(100),
+        }),
+        defineField({
+          name: 'body',
+          title: 'História',
+          type: 'array',
+          of: [defineArrayMember({type: 'block'})],
+          validation: (Rule) => Rule.required().min(1),
+        }),
+        defineField({
+          name: 'image',
+          title: 'Imagem',
+          type: 'imageWithAlt',
+          validation: (Rule) => Rule.required(),
+        }),
+      ],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'teamMembers',
+      title: 'Equipe em destaque',
+      type: 'array',
+      group: 'content',
+      of: [defineArrayMember({type: 'reference', to: [{type: 'teamMember'}]})],
+      validation: (Rule) => Rule.required().min(2).max(2).unique(),
+    }),
+    defineField({
+      name: 'services',
+      title: 'Serviços em destaque',
+      type: 'array',
+      group: 'content',
+      of: [defineArrayMember({type: 'reference', to: [{type: 'service'}]})],
+      validation: (Rule) => Rule.required().min(9).max(9).unique(),
+    }),
+    defineField({
+      name: 'caseCategoryCards',
+      title: 'Categorias de cases',
+      type: 'array',
+      group: 'content',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'caseCategoryCard',
+          fields: [
+            defineField({
+              name: 'category',
+              title: 'Categoria',
+              type: 'string',
+              options: {list: caseCategories},
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'title',
+              title: 'Título',
+              type: 'string',
+              validation: (Rule) => Rule.required().max(80),
+            }),
+            defineField({
+              name: 'summary',
+              title: 'Resumo',
+              type: 'text',
+              rows: 3,
+              validation: (Rule) => Rule.required().max(260),
+            }),
+            defineField({
+              name: 'image',
+              title: 'Imagem',
+              type: 'imageWithAlt',
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          preview: {
+            select: {title: 'title', subtitle: 'category', media: 'image'},
+          },
+        }),
+      ],
+      validation: (Rule) => Rule.required().min(4).max(4).unique(),
+    }),
+    defineField({
+      name: 'partnersHeading',
+      title: 'Título da seção de parceiros',
+      type: 'string',
+      group: 'content',
+      validation: (Rule) => Rule.required().max(100),
+    }),
+    defineField({
+      name: 'coverage',
+      title: 'Cobertura regional',
+      type: 'object',
+      group: 'content',
+      fields: [
+        defineField({
+          name: 'heading',
+          title: 'Título',
+          type: 'string',
+          validation: (Rule) => Rule.required().max(100),
+        }),
+        defineField({
+          name: 'summary',
+          title: 'Resumo',
+          type: 'text',
+          rows: 3,
+          validation: (Rule) => Rule.required().max(320),
+        }),
+        defineField({
+          name: 'states',
+          title: 'Estados exibidos',
+          type: 'array',
+          of: [defineArrayMember({type: 'string'})],
+          validation: (Rule) => Rule.required().min(5).max(5).unique(),
+        }),
+      ],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'finalCta',
+      title: 'Chamada final',
+      type: 'object',
+      group: 'content',
+      fields: [
+        defineField({
+          name: 'title',
+          title: 'Título',
+          type: 'string',
+          validation: (Rule) => Rule.required().max(100),
+        }),
+        defineField({
+          name: 'summary',
+          title: 'Resumo',
+          type: 'text',
+          rows: 3,
+          validation: (Rule) => Rule.required().max(280),
+        }),
+        defineField({
+          name: 'buttonLabel',
+          title: 'Texto do botão',
+          type: 'string',
+          validation: (Rule) => Rule.required().max(40),
+        }),
+        defineField({
+          name: 'whatsappMessage',
+          title: 'Mensagem inicial do WhatsApp',
+          type: 'string',
+          validation: (Rule) => Rule.required().max(240),
+        }),
+      ],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'sectionOrder',
+      title: 'Ordem das seções',
+      type: 'array',
+      group: 'order',
+      description: 'Arraste para alterar a ordem abaixo da abertura.',
+      of: [
+        defineArrayMember({
+          type: 'string',
+          options: {
+            list: [
+              {title: 'Indicadores', value: 'indicators'},
+              {title: 'Quem somos', value: 'about'},
+              {title: 'Equipe', value: 'team'},
+              {title: 'Serviços', value: 'services'},
+              {title: 'Cases', value: 'cases'},
+              {title: 'Parceiros', value: 'partners'},
+              {title: 'Cobertura regional', value: 'coverage'},
+              {title: 'Chamada final', value: 'finalCta'},
+            ],
+          },
+        }),
+      ],
+      initialValue: [
+        'indicators',
+        'about',
+        'team',
+        'services',
+        'cases',
+        'partners',
+        'coverage',
+        'finalCta',
+      ],
+      validation: (Rule) => Rule.required().min(8).max(8).unique(),
+    }),
+    defineField({
+      name: 'seo',
+      title: 'SEO',
+      type: 'seo',
+      group: 'seo',
+      validation: (Rule) => Rule.required(),
+    }),
+  ],
+  preview: {
+    prepare: () => ({title: 'Página inicial'}),
+  },
+})

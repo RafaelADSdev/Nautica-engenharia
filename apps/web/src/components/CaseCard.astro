@@ -1,0 +1,145 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { CaseCategory } from '../data/types';
+import { optimizedImageSrc, optimizedImageSrcSet } from '../lib/images';
+
+interface Props {
+  category: CaseCategory;
+  featured?: boolean;
+}
+
+const { category, featured = false } = Astro.props;
+const heroSrc = optimizedImageSrc(category.heroImage.src);
+const heroSrcSet = optimizedImageSrcSet(category.heroImage.src);
+---
+
+<article class:list={['case-card', { 'case-card--featured': featured }]}>
+  <a href={`/${category.slug}`} aria-label={`Conheça os cases de ${category.shortTitle}`}>
+    <img
+      src={heroSrc}
+      srcset={heroSrcSet}
+      sizes="(max-width: 780px) calc(100vw - 28px), 50vw"
+      alt={category.heroImage.alt}
+      width="960"
+      height="720"
+      loading="lazy"
+      decoding="async"
+    />
+    <div class="case-overlay"></div>
+    <div class="case-copy">
+      <span class="case-icon"><Icon name={category.icon} size={24} aria-hidden="true" /></span>
+      <div>
+        <span class="case-kicker">Cases</span>
+        <h3>{category.shortTitle}</h3>
+        <p>{category.description}</p>
+      </div>
+      <span class="case-link">Ver projetos <Icon name="lucide:arrow-up-right" size={18} aria-hidden="true" /></span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .case-card {
+    position: relative;
+    min-height: 430px;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: var(--graphite);
+  }
+
+  .case-card--featured {
+    grid-row: span 2;
+    min-height: 620px;
+  }
+
+  a,
+  img,
+  .case-overlay {
+    position: absolute;
+    inset: 0;
+  }
+
+  a {
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .case-overlay {
+    background: linear-gradient(0deg, rgb(23 26 0 / 94%) 0%, rgb(23 26 0 / 42%) 68%, rgb(23 26 0 / 8%) 100%);
+    transition: background var(--transition);
+  }
+
+  .case-copy {
+    position: absolute;
+    z-index: 1;
+    inset: auto 0 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    padding: clamp(24px, 3vw, 36px);
+  }
+
+  .case-icon {
+    display: grid;
+    width: 50px;
+    height: 50px;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--white);
+    background: var(--brand-orange-dark);
+  }
+
+  .case-kicker {
+    color: #ffb29c;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin: 7px 0 10px;
+    color: var(--white);
+    font-size: clamp(1.45rem, 2.5vw, 2.2rem);
+  }
+
+  p {
+    display: -webkit-box;
+    margin-bottom: 0;
+    overflow: hidden;
+    color: rgb(255 255 255 / 76%);
+    font-size: 0.85rem;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .case-link {
+    display: inline-flex;
+    grid-column: 2;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
+
+  .case-card:hover img,
+  .case-card:focus-within img {
+    transform: scale(1.04);
+  }
+
+  @media (max-width: 720px) {
+    .case-card,
+    .case-card--featured {
+      grid-row: auto;
+      min-height: 480px;
+    }
+  }
+</style>

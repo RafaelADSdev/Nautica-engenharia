@@ -1,0 +1,239 @@
+---
+import { Icon } from 'astro-icon/components';
+import ButtonLink from './ButtonLink.astro';
+import type { SiteSettings } from '../data/types';
+import { optimizedImageSrc } from '../lib/images';
+
+interface Props {
+  settings: SiteSettings;
+}
+
+const { settings } = Astro.props;
+const path = Astro.url.pathname;
+const logoSrc = optimizedImageSrc('/assets/brand/logo-nautica.png', 320);
+const nav = [
+  { href: '/#quem-somos', label: 'Quem somos' },
+  { href: '/#servicos', label: 'Serviços' },
+  { href: '/#cases', label: 'Cases' },
+  { href: '/#parceiros', label: 'Parceiros' },
+];
+---
+
+<header class="site-header" data-header>
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="Náutica Engenharia — página inicial">
+      <img src={logoSrc} alt="" width="74" height="74" decoding="async" />
+      <span>
+        <strong>Náutica</strong>
+        <small>Engenharia e Serviços</small>
+      </span>
+    </a>
+
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav" data-menu-button>
+      <span class="sr-only">Abrir menu</span>
+      <Icon name="lucide:menu" size={26} aria-hidden="true" data-menu-open />
+      <Icon name="lucide:x" size={26} aria-hidden="true" data-menu-close />
+    </button>
+
+    <nav id="main-nav" class="main-nav" aria-label="Navegação principal" data-nav>
+      <ul>
+        {nav.map((item) => (
+          <li><a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+      </ul>
+      <ButtonLink
+        href={`${settings.whatsapp.baseUrl}?text=${encodeURIComponent('Olá! Gostaria de conversar sobre uma necessidade de engenharia.')}`}
+        label="Solicitar orçamento"
+        external
+        icon="whatsapp"
+      />
+    </nav>
+  </div>
+</header>
+
+<script>
+  const button = document.querySelector('[data-menu-button]');
+  const nav = document.querySelector('[data-nav]');
+
+  const closeMenu = () => {
+    if (!(button instanceof HTMLButtonElement) || !(nav instanceof HTMLElement)) return;
+    button.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('nav-open');
+  };
+
+  button?.addEventListener('click', () => {
+    if (!(button instanceof HTMLButtonElement)) return;
+    const open = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', String(!open));
+    document.body.classList.toggle('nav-open', !open);
+  });
+
+  nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu();
+  });
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    right: 0;
+    left: 0;
+    padding: 12px 0;
+    border-bottom: 1px solid rgb(255 255 255 / 14%);
+    background: rgb(29 29 31 / 86%);
+    backdrop-filter: blur(16px);
+  }
+
+  .header-inner {
+    display: flex;
+    width: var(--container);
+    min-height: 64px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    margin-inline: auto;
+  }
+
+  .brand {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 12px;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .brand img {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+  }
+
+  .brand span {
+    display: grid;
+    line-height: 1;
+  }
+
+  .brand strong {
+    font-family: "Lemon Milk", "Montserrat", sans-serif;
+    font-size: 1.08rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .brand small {
+    margin-top: 6px;
+    color: rgb(255 255 255 / 72%);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .main-nav,
+  .main-nav ul {
+    display: flex;
+    align-items: center;
+  }
+
+  .main-nav {
+    gap: 24px;
+  }
+
+  .main-nav ul {
+    gap: 24px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .main-nav li a {
+    color: rgb(255 255 255 / 82%);
+    font-size: 0.86rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+
+  .main-nav li a:hover {
+    color: var(--white);
+  }
+
+  .menu-button {
+    display: none;
+    width: 46px;
+    height: 46px;
+    place-items: center;
+    border: 1px solid rgb(255 255 255 / 18%);
+    border-radius: 50%;
+    color: var(--white);
+    background: transparent;
+  }
+
+  [data-menu-close] {
+    display: none;
+  }
+
+  @media (max-width: 1020px) {
+    .menu-button {
+      display: grid;
+    }
+
+    .menu-button[aria-expanded='true'] [data-menu-open] {
+      display: none;
+    }
+
+    .menu-button[aria-expanded='true'] [data-menu-close] {
+      display: block;
+    }
+
+    .main-nav {
+      position: fixed;
+      top: 89px;
+      right: 0;
+      left: 0;
+      display: grid;
+      visibility: hidden;
+      padding: 32px max(20px, calc((100vw - min(680px, 100vw - 28px)) / 2));
+      transform: translateY(-16px);
+      opacity: 0;
+      background: var(--graphite);
+      transition:
+        visibility var(--transition),
+        opacity var(--transition),
+        transform var(--transition);
+    }
+
+    .menu-button[aria-expanded='true'] + .main-nav {
+      visibility: visible;
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .main-nav ul {
+      display: grid;
+      gap: 0;
+    }
+
+    .main-nav li a {
+      display: block;
+      padding: 16px 0;
+      border-bottom: 1px solid rgb(255 255 255 / 12%);
+      font-size: 1.08rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .brand small {
+      display: none;
+    }
+
+    .brand img {
+      width: 50px;
+      height: 50px;
+    }
+  }
+</style>

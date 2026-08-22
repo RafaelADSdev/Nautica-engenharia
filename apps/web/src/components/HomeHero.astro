@@ -1,0 +1,228 @@
+---
+import { Icon } from 'astro-icon/components';
+import ButtonLink from './ButtonLink.astro';
+import { homePage as localHomePage } from '../data/site';
+import type { HomePageContent } from '../data/types';
+import { optimizedImageSrc, optimizedImageSrcSet } from '../lib/images';
+
+interface Props {
+  content?: HomePageContent;
+}
+
+const { content = localHomePage } = Astro.props;
+const heroSrc = optimizedImageSrc(content.hero.image.src);
+const heroSrcSet = optimizedImageSrcSet(content.hero.image.src);
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <img
+    class="hero-image"
+    src={heroSrc}
+    srcset={heroSrcSet}
+    sizes="100vw"
+    alt={content.hero.image.alt}
+    width="1920"
+    height="1200"
+    loading="eager"
+    decoding="async"
+    fetchpriority="high"
+  />
+  <div class="hero-overlay"></div>
+  <div class="hero-lines" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <span class="hero-kicker"><Icon name="lucide:shield-check" size={18} aria-hidden="true" /> {content.hero.eyebrow}</span>
+      <h1 id="hero-title">{content.hero.title}</h1>
+      <strong class="hero-highlight">{content.hero.highlightedText}</strong>
+      <p>{content.hero.description}</p>
+      <div class="hero-actions">
+        <ButtonLink
+          href={content.hero.primaryCta.href}
+          label={content.hero.primaryCta.label}
+          external
+          icon="whatsapp"
+        />
+        <ButtonLink href={content.hero.secondaryCta.href} label={content.hero.secondaryCta.label} variant="light" icon="lucide:arrow-down" />
+      </div>
+    </div>
+    <aside class="hero-note" aria-label="Destaque institucional">
+      <span>Atuação regional</span>
+      <strong>Recife e os principais estados do Nordeste</strong>
+      <div class="state-dots" role="img" aria-label="Pernambuco, Alagoas, Paraíba, Ceará e Rio Grande do Norte">
+        <i></i><i></i><i></i><i></i><i></i>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    min-height: min(900px, 100svh);
+    align-items: flex-end;
+    overflow: hidden;
+    color: var(--white);
+    background: var(--graphite);
+  }
+
+  .hero-image,
+  .hero-overlay,
+  .hero-lines {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero-overlay {
+    background:
+      linear-gradient(90deg, rgb(23 26 0 / 94%) 0%, rgb(23 26 0 / 78%) 45%, rgb(23 26 0 / 22%) 100%),
+      linear-gradient(0deg, rgb(45 45 48 / 72%) 0%, transparent 50%);
+  }
+
+  .hero-lines {
+    opacity: 0.18;
+    background-image:
+      linear-gradient(90deg, transparent calc(100% - 1px), rgb(255 255 255 / 34%) 1px),
+      linear-gradient(transparent calc(100% - 1px), rgb(255 255 255 / 20%) 1px);
+    background-size: 25vw 100%, 100% 25vh;
+    mask-image: linear-gradient(90deg, black, transparent 82%);
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 270px;
+    align-items: end;
+    gap: 70px;
+    padding-block: 190px 72px;
+  }
+
+  .hero-copy {
+    max-width: 900px;
+  }
+
+  .hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 26px;
+    color: #ffb29c;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-width: 980px;
+    margin-bottom: 28px;
+    color: var(--white);
+    font-size: clamp(3rem, 6.1vw, 6.2rem);
+    text-wrap: balance;
+  }
+
+  .hero-copy > p {
+    max-width: 700px;
+    margin-bottom: 36px;
+    color: rgb(255 255 255 / 80%);
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+  }
+
+  .hero-highlight {
+    display: block;
+    margin: -12px 0 20px;
+    color: #ffb29c;
+    font-size: clamp(0.92rem, 1.4vw, 1.08rem);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .hero-note {
+    padding: 26px;
+    border: 1px solid rgb(255 255 255 / 18%);
+    border-radius: var(--radius-md);
+    background: rgb(255 255 255 / 8%);
+    backdrop-filter: blur(14px);
+  }
+
+  .hero-note span {
+    display: block;
+    margin-bottom: 10px;
+    color: #ffb29c;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .hero-note strong {
+    display: block;
+    color: var(--white);
+    font-size: 0.98rem;
+    line-height: 1.4;
+  }
+
+  .state-dots {
+    display: flex;
+    gap: 8px;
+    margin-top: 22px;
+  }
+
+  .state-dots i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--brand-orange);
+  }
+
+  @media (max-width: 960px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 42px;
+      padding-block: 160px 52px;
+    }
+
+    .hero-note {
+      max-width: 360px;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .hero {
+      min-height: 820px;
+    }
+
+    .hero-overlay {
+      background: linear-gradient(0deg, rgb(23 26 0 / 96%) 0%, rgb(23 26 0 / 76%) 64%, rgb(23 26 0 / 45%) 100%);
+    }
+
+    .hero-inner {
+      padding-block: 140px 36px;
+    }
+
+    h1 {
+      font-size: clamp(2.55rem, 12vw, 4rem);
+    }
+
+    .hero-actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .hero-actions :global(.button-link) {
+      width: 100%;
+    }
+  }
+</style>

@@ -1,0 +1,40 @@
+{
+  "name": "@nautica/web",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev --background",
+    "dev:foreground": "astro dev",
+    "dev:stop": "astro dev stop",
+    "dev:status": "astro dev status",
+    "dev:logs": "astro dev logs",
+    "build": "astro build",
+    "assets:optimize": "node scripts/optimize-local-assets.mjs",
+    "check": "astro check",
+    "preview": "astro preview",
+    "astro": "astro",
+    "test": "vitest run",
+    "test:e2e": "astro build && playwright test",
+    "content:validate": "corepack pnpm --dir ../.. content:validate"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "@iconify-json/lucide": "^1.2.125",
+    "@sanity/astro": "^3.5.1",
+    "@sanity/client": "^8.2.0",
+    "@sanity/image-url": "^2.1.1",
+    "astro": "^7.2.4",
+    "astro-icon": "^1.2.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1",
+    "sharp": "0.35.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  }
+}

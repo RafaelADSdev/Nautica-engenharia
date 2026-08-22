@@ -1,0 +1,29 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { CaseCategory, LegalPage, Service } from '../data/types';
+import { getSiteContent } from '../lib/content';
+import CaseCategoryPage from '../components/CaseCategoryPage.astro';
+import LegalPageView from '../components/LegalPageView.astro';
+import ServicePage from '../components/ServicePage.astro';
+
+type PageProps =
+  | { kind: 'service'; content: Service }
+  | { kind: 'case'; content: CaseCategory }
+  | { kind: 'legal'; content: LegalPage };
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const content = await getSiteContent();
+  return [
+    ...content.services.map((service) => ({ params: { slug: service.slug }, props: { kind: 'service' as const, content: service } })),
+    ...content.caseCategories.map((category) => ({ params: { slug: category.slug }, props: { kind: 'case' as const, content: category } })),
+    ...content.legalPages.map((page) => ({ params: { slug: page.slug }, props: { kind: 'legal' as const, content: page } })),
+  ];
+};
+
+const props = Astro.props as PageProps;
+const allContent = await getSiteContent();
+---
+
+{props.kind === 'service' && <ServicePage service={props.content} allServices={allContent.services} allPartners={allContent.partners} />}
+{props.kind === 'case' && <CaseCategoryPage category={props.content} categories={allContent.caseCategories} />}
+{props.kind === 'legal' && <LegalPageView page={props.content} />}

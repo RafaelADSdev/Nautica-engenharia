@@ -1,0 +1,296 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { CaseCategory } from '../data/types';
+import { caseCategories as localCategories, getWhatsAppUrl } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FinalCta from './FinalCta.astro';
+import GalleryLightbox from './GalleryLightbox.astro';
+import PageHero from './PageHero.astro';
+
+interface Props {
+  category: CaseCategory;
+  categories?: CaseCategory[];
+}
+
+const { category, categories = localCategories } = Astro.props;
+const whatsappHref = getWhatsAppUrl(category.whatsappMessage);
+const canonicalUrl = `https://www.nauticaengenharia.com/${category.slug}`;
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://www.nauticaengenharia.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Cases', item: 'https://www.nauticaengenharia.com/#cases' },
+    { '@type': 'ListItem', position: 3, name: category.title, item: canonicalUrl },
+  ],
+};
+---
+
+<BaseLayout
+  title={category.seo.title}
+  description={category.seo.description}
+  canonicalPath={`/${category.slug}`}
+  image={category.seo.image ?? category.heroImage.src}
+  imageAlt={category.heroImage.alt}
+  schema={breadcrumbSchema}
+>
+  <PageHero
+    eyebrow={category.eyebrow}
+    title={category.title}
+    summary={category.description}
+    image={category.heroImage}
+    icon={category.icon}
+    ctaHref={whatsappHref}
+    ctaLabel="Conversar sobre uma obra"
+    breadcrumbs={[
+      { label: 'Início', href: '/' },
+      { label: 'Cases', href: '/#cases' },
+      { label: category.shortTitle },
+    ]}
+  />
+
+  <section class="section case-list" aria-labelledby="case-list-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Projetos e clientes</span>
+          <h2 id="case-list-title">Serviços realizados em {category.shortTitle.toLocaleLowerCase('pt-BR')}.</h2>
+        </div>
+        <p>Escopos apresentados no portfólio institucional da Náutica Engenharia.</p>
+      </div>
+
+      <div class="case-projects">
+        {category.cases.map((caseStudy, index) => (
+          <article class="project-card">
+            <div class="project-index">{String(index + 1).padStart(2, '0')}</div>
+            <div class="project-copy">
+              <span>Cliente</span>
+              <h3>{caseStudy.client}</h3>
+              <p>{caseStudy.summary}</p>
+            </div>
+            <div class="project-scope">
+              <strong>Serviços executados</strong>
+              <ul>
+                {caseStudy.activities.map((activity) => <li><Icon name="lucide:check" size={17} aria-hidden="true" /> {activity}</li>)}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <aside class="result-note">
+        <Icon name="lucide:shield-check" size={32} aria-hidden="true" />
+        <div>
+          <span>Resultado do conjunto de projetos</span>
+          <p>{category.result}</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <GalleryLightbox images={category.gallery} title={`Registros de cases em ${category.shortTitle.toLocaleLowerCase('pt-BR')}`} eyebrow="Portfólio visual" />
+
+  <section class="section more-cases" aria-labelledby="more-cases-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Outros segmentos</span>
+          <h2 id="more-cases-title">Explore mais cases</h2>
+        </div>
+        <p>Conheça a atuação da Náutica em outros ambientes e tipos de operação.</p>
+      </div>
+      <nav class="case-nav" aria-label="Categorias de cases">
+        {categories.map((item) => (
+          <a href={`/${item.slug}`} aria-current={item.slug === category.slug ? 'page' : undefined}>
+            <Icon name={item.icon} size={23} aria-hidden="true" />
+            <span>{item.shortTitle}</span>
+            <Icon name="lucide:arrow-up-right" size={18} aria-hidden="true" />
+          </a>
+        ))}
+      </nav>
+    </div>
+  </section>
+
+  <FinalCta
+    eyebrow="Planeje sua próxima intervenção"
+    title={`Sua operação de ${category.shortTitle.toLocaleLowerCase('pt-BR')} precisa de engenharia especializada?`}
+    description="Apresente o escopo e o contexto da operação para a equipe da Náutica Engenharia."
+    href={whatsappHref}
+    label="Falar sobre meu projeto"
+  />
+</BaseLayout>
+
+<style>
+  .case-list {
+    background: var(--sand);
+  }
+
+  .case-projects {
+    display: grid;
+    gap: 16px;
+  }
+
+  .project-card {
+    display: grid;
+    grid-template-columns: 70px minmax(0, 0.9fr) minmax(300px, 1.1fr);
+    gap: clamp(20px, 4vw, 50px);
+    padding: clamp(24px, 4vw, 42px);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--white);
+  }
+
+  .project-index {
+    color: var(--brand-orange-dark);
+    font-family: 'Lemon Milk', sans-serif;
+    font-size: 1rem;
+  }
+
+  .project-copy > span {
+    color: var(--ink-muted);
+    font-size: 0.67rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .project-copy h3 {
+    margin: 8px 0 14px;
+  }
+
+  .project-copy p {
+    margin-bottom: 0;
+    color: var(--ink-muted);
+    font-size: 0.88rem;
+  }
+
+  .project-scope {
+    padding-left: clamp(0px, 3vw, 38px);
+    border-left: 1px solid var(--line);
+  }
+
+  .project-scope > strong {
+    display: block;
+    margin-bottom: 14px;
+    color: var(--graphite);
+    font-size: 0.8rem;
+  }
+
+  .project-scope ul {
+    display: grid;
+    gap: 9px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .project-scope li {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    color: var(--ink-muted);
+    font-size: 0.83rem;
+  }
+
+  .project-scope :global(svg) {
+    color: var(--brand-orange-dark);
+  }
+
+  .result-note {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 22px;
+    margin-top: 28px;
+    padding: 30px;
+    border-radius: var(--radius-md);
+    color: var(--white);
+    background: var(--olive);
+  }
+
+  .result-note > :global(svg) {
+    color: var(--brand-orange);
+  }
+
+  .result-note span {
+    color: #ffb29c;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .result-note p {
+    margin: 8px 0 0;
+    color: rgb(255 255 255 / 80%);
+  }
+
+  .case-nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .case-nav a {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    min-height: 88px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    color: var(--graphite);
+    text-decoration: none;
+    transition: border-color var(--transition), transform var(--transition);
+  }
+
+  .case-nav a:hover,
+  .case-nav a[aria-current='page'] {
+    transform: translateY(-3px);
+    border-color: var(--brand-orange);
+  }
+
+  .case-nav a[aria-current='page'] {
+    background: var(--brand-orange-soft);
+  }
+
+  .case-nav a > :global(svg:first-child) {
+    color: var(--brand-orange-dark);
+  }
+
+  .case-nav span {
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  @media (max-width: 900px) {
+    .project-card {
+      grid-template-columns: 50px 1fr;
+    }
+
+    .project-scope {
+      grid-column: 2;
+      padding: 20px 0 0;
+      border-top: 1px solid var(--line);
+      border-left: 0;
+    }
+
+    .case-nav {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .project-card {
+      grid-template-columns: 1fr;
+    }
+
+    .project-scope {
+      grid-column: auto;
+    }
+
+    .case-nav {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

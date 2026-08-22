@@ -1,0 +1,15 @@
+{
+  "name": "nautica-engenharia",
+  "private": true,
+  "packageManager": "pnpm@11.22.0",
+  "scripts": {
+    "dev": "corepack pnpm --filter @nautica/web dev",
+    "build": "corepack pnpm --filter @nautica/web build",
+    "check": "corepack pnpm --filter @nautica/web check && corepack pnpm --filter @nautica/studio check",
+    "test": "corepack pnpm --filter @nautica/web test",
+    "test:e2e": "corepack pnpm --filter @nautica/web test:e2e",
+    "content:validate": "corepack pnpm --filter @nautica/studio seed",
+    "sanity:seed": "corepack pnpm --filter @nautica/studio seed:apply",
+    "validate": "corepack pnpm content:validate && corepack pnpm check && corepack pnpm test && corepack pnpm build"
+  }
+}

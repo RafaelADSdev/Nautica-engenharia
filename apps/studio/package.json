@@ -1,0 +1,30 @@
+{
+  "name": "@nautica/studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "typecheck": "tsc --noEmit",
+    "check": "tsc --noEmit",
+    "seed": "tsx scripts/seed.ts",
+    "seed:apply": "tsx scripts/seed.ts --apply"
+  },
+  "dependencies": {
+    "@sanity/client": "^8.2.0",
+    "@sanity/vision": "^6.10.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "sanity": "^6.10.1",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "tsx": "^4.23.12",
+    "typescript": "^5.9.3"
+  }
+}

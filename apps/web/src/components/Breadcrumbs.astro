@@ -1,0 +1,56 @@
+---
+interface Item {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: Item[];
+  light?: boolean;
+}
+
+const { items, light = false } = Astro.props;
+---
+
+<nav class:list={['breadcrumbs', { 'breadcrumbs--light': light }]} aria-label="Navegação estrutural">
+  <ol>
+    {items.map((item, index) => (
+      <li>
+        {item.href ? <a href={item.href}>{item.label}</a> : <span aria-current="page">{item.label}</span>}
+        {index < items.length - 1 && <span class="separator" aria-hidden="true">/</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  .separator {
+    opacity: 0.55;
+  }
+
+  .breadcrumbs--light li {
+    color: rgb(255 255 255 / 70%);
+  }
+</style>

@@ -1,0 +1,73 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getSiteContent } from '../lib/content';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  image?: string;
+  imageAlt?: string;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+  noIndex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonicalPath = Astro.url.pathname,
+  image = '/og.png',
+  imageAlt = '',
+  schema,
+  noIndex = false,
+} = Astro.props;
+
+const { siteSettings } = await getSiteContent();
+const siteName = siteSettings.businessName;
+const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
+const canonical = new URL(canonicalPath, Astro.site ?? Astro.url.origin);
+const socialImage = image ? new URL(image, canonical).toString() : undefined;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#2D2D30" />
+    <meta name="description" content={description} />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/assets/brand/favicon.png" type="image/png" />
+    <link rel="preload" href="/assets/fonts/lemon-milk.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/montserrat-variable.woff2" as="font" type="font/woff2" crossorigin />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {socialImage && <meta property="og:image" content={socialImage} />}
+    {socialImage && <meta property="og:image:alt" content={imageAlt} />}
+    {socialImage && image === '/og.png' && <meta property="og:image:width" content="1200" />}
+    {socialImage && image === '/og.png' && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content={socialImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    {socialImage && <meta name="twitter:image" content={socialImage} />}
+    <title>{fullTitle}</title>
+    {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <Header settings={siteSettings} />
+    <main id="conteudo">
+      <slot />
+    </main>
+    <Footer settings={siteSettings} />
+  </body>
+</html>

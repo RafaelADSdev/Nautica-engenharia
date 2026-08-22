@@ -1,0 +1,112 @@
+---
+import { Icon } from 'astro-icon/components';
+import ButtonLink from './ButtonLink.astro';
+import { homePage } from '../data/site';
+import type { HomePageContent } from '../data/types';
+
+interface Props {
+  content?: HomePageContent['finalCta'];
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  href?: string;
+  label?: string;
+}
+
+const {
+  content = homePage.finalCta,
+  eyebrow = content.eyebrow,
+  title = content.title,
+  description = content.description,
+  href = content.cta.href,
+  label = content.cta.label,
+} = Astro.props;
+---
+
+<section class="cta-section" aria-labelledby="cta-title">
+  <div class="cta-grid" aria-hidden="true"></div>
+  <div class="container cta-inner">
+    <div>
+      <span class="cta-eyebrow">{eyebrow}</span>
+      <h2 id="cta-title">{title}</h2>
+      <p>{description}</p>
+    </div>
+    <div class="cta-action">
+      <ButtonLink href={href} label={label} variant="light" external={href.startsWith('http')} icon="whatsapp" />
+      <span><Icon name="lucide:clock-3" size={17} aria-hidden="true" /> Atendimento comercial pelo WhatsApp</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-section {
+    position: relative;
+    overflow: hidden;
+    color: var(--white);
+    background: var(--brand-orange-dark);
+  }
+
+  .cta-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.18;
+    background-image:
+      linear-gradient(90deg, transparent calc(100% - 1px), rgb(255 255 255 / 50%) 1px),
+      linear-gradient(transparent calc(100% - 1px), rgb(255 255 255 / 40%) 1px);
+    background-size: 160px 100%, 100% 120px;
+    transform: rotate(-8deg) scale(1.2);
+  }
+
+  .cta-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(250px, 0.8fr);
+    align-items: center;
+    gap: 60px;
+    padding-block: clamp(70px, 9vw, 110px);
+  }
+
+  .cta-eyebrow {
+    display: block;
+    margin-bottom: 18px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    max-width: 820px;
+    margin-bottom: 20px;
+    color: var(--white);
+  }
+
+  p {
+    max-width: 680px;
+    margin-bottom: 0;
+    color: rgb(255 255 255 / 82%);
+  }
+
+  .cta-action {
+    display: grid;
+    justify-items: start;
+    gap: 16px;
+  }
+
+  .cta-action > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgb(255 255 255 / 72%);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 760px) {
+    .cta-inner {
+      grid-template-columns: 1fr;
+      gap: 34px;
+    }
+  }
+</style>
