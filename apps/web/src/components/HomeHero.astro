@@ -31,11 +31,11 @@ const heroSrcSet = optimizedImageSrcSet(content.hero.image.src);
   <div class="hero-lines" aria-hidden="true"></div>
   <div class="container hero-inner">
     <div class="hero-copy">
-      <span class="hero-kicker"><Icon name="lucide:shield-check" size={18} aria-hidden="true" /> {content.hero.eyebrow}</span>
-      <h1 id="hero-title">{content.hero.title}</h1>
-      <strong class="hero-highlight">{content.hero.highlightedText}</strong>
-      <p>{content.hero.description}</p>
-      <div class="hero-actions">
+      <span class="hero-kicker" data-reveal data-reveal-delay="60"><Icon name="lucide:shield-check" size={18} aria-hidden="true" /> {content.hero.eyebrow}</span>
+      <h1 id="hero-title" data-reveal data-reveal-delay="120">{content.hero.title}</h1>
+      <strong class="hero-highlight" data-reveal data-reveal-delay="180">{content.hero.highlightedText}</strong>
+      <p data-reveal data-reveal-delay="240">{content.hero.description}</p>
+      <div class="hero-actions" data-reveal data-reveal-delay="300">
         <ButtonLink
           href={content.hero.primaryCta.href}
           label={content.hero.primaryCta.label}
@@ -45,7 +45,7 @@ const heroSrcSet = optimizedImageSrcSet(content.hero.image.src);
         <ButtonLink href={content.hero.secondaryCta.href} label={content.hero.secondaryCta.label} variant="light" icon="lucide:arrow-down" />
       </div>
     </div>
-    <aside class="hero-note" aria-label="Destaque institucional">
+    <aside class="hero-note" aria-label="Destaque institucional" data-reveal="left" data-reveal-delay="380">
       <span>Atuação regional</span>
       <strong>Recife e os principais estados do Nordeste</strong>
       <div class="state-dots" role="img" aria-label="Pernambuco, Alagoas, Paraíba, Ceará e Rio Grande do Norte">
@@ -185,6 +185,25 @@ const heroSrcSet = optimizedImageSrcSet(content.hero.image.src);
     height: 9px;
     border-radius: 50%;
     background: var(--brand-orange);
+    animation: hero-dot 2.4s ease-in-out infinite;
+  }
+
+  .state-dots i:nth-child(2) { animation-delay: 0.2s; }
+  .state-dots i:nth-child(3) { animation-delay: 0.4s; }
+  .state-dots i:nth-child(4) { animation-delay: 0.6s; }
+  .state-dots i:nth-child(5) { animation-delay: 0.8s; }
+
+  @keyframes hero-dot {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: translateY(0);
+    }
+
+    50% {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
   }
 
   @media (max-width: 960px) {

@@ -6,14 +6,15 @@ import { optimizedImageSrc, optimizedImageSrcSet } from '../lib/images';
 interface Props {
   category: CaseCategory;
   featured?: boolean;
+  revealDelay?: number;
 }
 
-const { category, featured = false } = Astro.props;
+const { category, featured = false, revealDelay = 0 } = Astro.props;
 const heroSrc = optimizedImageSrc(category.heroImage.src);
 const heroSrcSet = optimizedImageSrcSet(category.heroImage.src);
 ---
 
-<article class:list={['case-card', { 'case-card--featured': featured }]}>
+<article class:list={['case-card', { 'case-card--featured': featured }]} data-reveal data-reveal-delay={String(revealDelay)}>
   <a href={`/${category.slug}`} aria-label={`Conheça os cases de ${category.shortTitle}`}>
     <img
       src={heroSrc}

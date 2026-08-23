@@ -61,6 +61,20 @@ const nav = [
     document.body.classList.remove('nav-open');
   };
 
+  const isHomePage = () => {
+    const path = window.location.pathname.replace(/\/$/, '');
+    return path === '' || path === '/index.html';
+  };
+
+  const scrollToSection = (hash: string) => {
+    const target = document.getElementById(hash.slice(1));
+    if (!target) return false;
+
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.pushState(null, '', hash);
+    return true;
+  };
+
   button?.addEventListener('click', () => {
     if (!(button instanceof HTMLButtonElement)) return;
     const open = button.getAttribute('aria-expanded') === 'true';
@@ -68,7 +82,30 @@ const nav = [
     document.body.classList.toggle('nav-open', !open);
   });
 
-  nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  nav?.querySelectorAll('a[href*="#"]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const href = link.getAttribute('href');
+      if (!href?.includes('#')) return;
+
+      const hash = href.slice(href.indexOf('#'));
+      if (hash === '#') return;
+
+      if (isHomePage() && href.startsWith('/#')) {
+        event.preventDefault();
+        if (scrollToSection(hash)) closeMenu();
+        return;
+      }
+
+      closeMenu();
+    });
+  });
+
+  if (isHomePage() && window.location.hash) {
+    window.addEventListener('load', () => {
+      window.setTimeout(() => scrollToSection(window.location.hash), 80);
+    });
+  }
+
   window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeMenu();
   });
@@ -151,15 +188,45 @@ const nav = [
   }
 
   .main-nav li a {
+    position: relative;
+    display: inline-block;
+    padding-block: 4px 8px;
     color: rgb(255 255 255 / 82%);
     font-size: 0.86rem;
     font-weight: 700;
     text-decoration: none;
-    transition: color var(--transition);
+    transition:
+      color var(--transition),
+      transform var(--transition);
   }
 
-  .main-nav li a:hover {
+  .main-nav li a::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--brand-orange), #ffb29c);
+    box-shadow: 0 0 12px rgb(240 92 54 / 45%);
+    content: '';
+    opacity: 0;
+    transform: scaleX(0.35);
+    transition:
+      transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      opacity 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .main-nav li a:hover,
+  .main-nav li a:focus-visible {
     color: var(--white);
+    transform: translateY(-1px);
+  }
+
+  .main-nav li a:hover::after,
+  .main-nav li a:focus-visible::after {
+    opacity: 1;
+    transform: scaleX(1);
   }
 
   .menu-button {
@@ -223,6 +290,19 @@ const nav = [
       padding: 16px 0;
       border-bottom: 1px solid rgb(255 255 255 / 12%);
       font-size: 1.08rem;
+      transform: none;
+    }
+
+    .main-nav li a::after {
+      right: auto;
+      bottom: 10px;
+      left: 0;
+      width: 36px;
+    }
+
+    .main-nav li a:hover::after,
+    .main-nav li a:focus-visible::after {
+      transform: scaleX(1);
     }
   }
 

@@ -14,7 +14,7 @@ const { content = localHomePage, members = localTeamMembers } = Astro.props;
 
 <section class="section section--sand team" aria-labelledby="team-title">
   <div class="container">
-    <div class="section-heading">
+    <div class="section-heading" data-reveal>
       <div>
         <span class="eyebrow">{content.team.eyebrow}</span>
         <h2 id="team-title">{content.team.title}</h2>
@@ -23,8 +23,8 @@ const { content = localHomePage, members = localTeamMembers } = Astro.props;
     </div>
 
     <div class="team-grid">
-      {members.map((member) => (
-        <article class="team-card">
+      {members.map((member, index) => (
+        <article class="team-card" data-reveal data-reveal-delay={String(100 + index * 100)}>
           <div class="team-photo">
             <img
               src={optimizedImageSrc(member.photo.src)}
@@ -63,6 +63,17 @@ const { content = localHomePage, members = localTeamMembers } = Astro.props;
     border: 1px solid var(--line);
     border-radius: var(--radius-md);
     background: var(--white);
+    box-shadow: 0 0 0 rgb(45 45 48 / 0%);
+    transition:
+      transform var(--transition),
+      border-color var(--transition),
+      box-shadow var(--transition);
+  }
+
+  .team-card:hover {
+    transform: translateY(-5px);
+    border-color: rgb(240 92 54 / 28%);
+    box-shadow: var(--shadow-sm);
   }
 
   .team-photo {

@@ -15,7 +15,7 @@ const aboutSrcSet = optimizedImageSrcSet(content.about.image.src);
 
 <section class="section about" id="quem-somos" aria-labelledby="about-title">
   <div class="container about-grid">
-    <div class="about-media">
+    <div class="about-media" data-reveal="left">
       <img
         src={aboutSrc}
         srcset={aboutSrcSet}
@@ -26,21 +26,21 @@ const aboutSrcSet = optimizedImageSrcSet(content.about.image.src);
         loading="lazy"
         decoding="async"
       />
-      <div class="about-seal" aria-label="Mais de 10 anos de atuação">
+      <div class="about-seal" aria-label="Mais de 10 anos de atuação" data-reveal="scale" data-reveal-delay="220">
         <strong>10+</strong>
         <span>anos de<br />experiência</span>
       </div>
     </div>
 
-    <div class="about-copy">
+    <div class="about-copy" data-reveal="right" data-reveal-delay="120">
       <span class="eyebrow">{content.about.eyebrow}</span>
       <h2 id="about-title">{content.about.title}</h2>
       {content.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
 
       <ul class="about-pillars" aria-label="Compromissos da Náutica Engenharia">
-        <li><Icon name="lucide:clipboard-check" size={23} aria-hidden="true" /><span><strong>Planejamento</strong> para cada frente de serviço</span></li>
-        <li><Icon name="lucide:hard-hat" size={23} aria-hidden="true" /><span><strong>Execução técnica</strong> com equipe especializada</span></li>
-        <li><Icon name="lucide:map-pin" size={23} aria-hidden="true" /><span><strong>Presença regional</strong> em cinco estados</span></li>
+        <li data-reveal data-reveal-delay="180"><Icon name="lucide:clipboard-check" size={23} aria-hidden="true" /><span><strong>Planejamento</strong> para cada frente de serviço</span></li>
+        <li data-reveal data-reveal-delay="240"><Icon name="lucide:hard-hat" size={23} aria-hidden="true" /><span><strong>Execução técnica</strong> com equipe especializada</span></li>
+        <li data-reveal data-reveal-delay="300"><Icon name="lucide:map-pin" size={23} aria-hidden="true" /><span><strong>Presença regional</strong> em cinco estados</span></li>
       </ul>
     </div>
   </div>

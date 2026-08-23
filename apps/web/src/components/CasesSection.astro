@@ -14,7 +14,7 @@ const { content = localHomePage, categories = localCategories } = Astro.props;
 
 <section class="section cases" id="cases" aria-labelledby="cases-title">
   <div class="container">
-    <div class="section-heading">
+    <div class="section-heading" data-reveal>
       <div>
         <span class="eyebrow">{content.cases.eyebrow}</span>
         <h2 id="cases-title">{content.cases.title}</h2>
@@ -26,7 +26,7 @@ const { content = localHomePage, categories = localCategories } = Astro.props;
     </div>
 
     <div class="cases-grid">
-      {categories.map((category, index) => <CaseCard category={category} featured={index === 0} />)}
+      {categories.map((category, index) => <CaseCard category={category} featured={index === 0} revealDelay={index * 90} />)}
     </div>
   </div>
 </section>

@@ -19,7 +19,7 @@ const filters = [
 
 <section class="section partners" id="parceiros" aria-labelledby="partners-title">
   <div class="container">
-    <div class="partners-heading">
+    <div class="partners-heading" data-reveal>
       <div>
         <span class="eyebrow">{content.partners.eyebrow}</span>
         <h2 id="partners-title">{content.partners.title}</h2>
@@ -42,8 +42,8 @@ const filters = [
 
     <p class="partner-status sr-only" aria-live="polite" data-partner-status>{items.length} parceiros exibidos</p>
     <div class="partner-grid" data-partner-grid>
-      {items.map((partner) => (
-        <article class="partner-card" data-partner-card data-category={partner.category}>
+      {items.map((partner, index) => (
+        <article class="partner-card" data-partner-card data-category={partner.category} data-reveal data-reveal-delay={String((index % 5) * 60)}>
           <div class="logo-frame">
             <img src={optimizedImageSrc(partner.logo.src, 320)} alt={partner.logo.alt} width="320" height="190" loading="lazy" decoding="async" />
           </div>

@@ -48,10 +48,10 @@ const heroSrcSet = optimizedImageSrcSet(image.src);
   <div class="container page-hero-inner">
     <Breadcrumbs items={breadcrumbs} light />
     <div class:list={['page-hero-copy', { 'page-hero-copy--compact': compactTitle }]}>
-      <span class="page-eyebrow"><Icon name={icon} size={20} aria-hidden="true" /> {eyebrow}</span>
-      <h1 id="page-title">{title}</h1>
-      <p>{summary}</p>
-      {ctaHref && <ButtonLink href={ctaHref} label={ctaLabel} external icon="whatsapp" />}
+      <span class="page-eyebrow" data-reveal><Icon name={icon} size={20} aria-hidden="true" /> {eyebrow}</span>
+      <h1 id="page-title" data-reveal data-reveal-delay="80">{title}</h1>
+      <p data-reveal data-reveal-delay="140">{summary}</p>
+      {ctaHref && <span data-reveal data-reveal-delay="200"><ButtonLink href={ctaHref} label={ctaLabel} external icon="whatsapp" /></span>}
     </div>
   </div>
 </section>

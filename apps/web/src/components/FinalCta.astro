@@ -27,11 +27,11 @@ const {
   <div class="cta-grid" aria-hidden="true"></div>
   <div class="container cta-inner">
     <div>
-      <span class="cta-eyebrow">{eyebrow}</span>
-      <h2 id="cta-title">{title}</h2>
-      <p>{description}</p>
+      <span class="cta-eyebrow" data-reveal>{eyebrow}</span>
+      <h2 id="cta-title" data-reveal data-reveal-delay="80">{title}</h2>
+      <p data-reveal data-reveal-delay="140">{description}</p>
     </div>
-    <div class="cta-action">
+    <div class="cta-action" data-reveal data-reveal-delay="220">
       <ButtonLink href={href} label={label} variant="light" external={href.startsWith('http')} icon="whatsapp" />
       <span><Icon name="lucide:clock-3" size={17} aria-hidden="true" /> Atendimento comercial pelo WhatsApp</span>
     </div>

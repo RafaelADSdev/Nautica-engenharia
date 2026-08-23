@@ -13,18 +13,18 @@ const { content = localHomePage, states = localStates } = Astro.props;
 
 <section class="section coverage" aria-labelledby="coverage-title">
   <div class="container coverage-grid">
-    <div class="coverage-copy">
+    <div class="coverage-copy" data-reveal="right">
       <span class="eyebrow">{content.coverage.eyebrow}</span>
       <h2 id="coverage-title">{content.coverage.title}</h2>
       <p>{content.coverage.description}</p>
       <div class="hq-note"><Icon name="lucide:building-2" size={20} aria-hidden="true" /><span><strong>Sede em Recife</strong> — atendimento regional planejado conforme cada operação.</span></div>
     </div>
 
-    <div class="coverage-map" aria-label="Estados atendidos pela Náutica Engenharia">
+    <div class="coverage-map" aria-label="Estados atendidos pela Náutica Engenharia" data-reveal="left" data-reveal-delay="140">
       <div class="map-rings" aria-hidden="true"><i></i><i></i><i></i></div>
       <ul>
-        {states.map((state) => (
-          <li class:list={{ headquarters: state.isHeadquarters }}>
+        {states.map((state, index) => (
+          <li class:list={{ headquarters: state.isHeadquarters }} data-reveal="scale" data-reveal-delay={String(200 + index * 70)}>
             <strong>{state.code}</strong>
             <span>{state.name}{state.isHeadquarters ? ' — sede' : ''}</span>
           </li>
@@ -107,9 +107,22 @@ const { content = localHomePage, states = localStates } = Astro.props;
     transform: translateY(-50%);
   }
 
-  .map-rings i:nth-child(1) { inset: 55px; }
-  .map-rings i:nth-child(2) { inset: 120px; }
-  .map-rings i:nth-child(3) { inset: 180px; border-color: var(--brand-orange); }
+  .map-rings i:nth-child(1) { inset: 55px; animation: map-pulse 4.8s ease-in-out infinite; }
+  .map-rings i:nth-child(2) { inset: 120px; animation: map-pulse 4.8s ease-in-out infinite 0.8s; }
+  .map-rings i:nth-child(3) { inset: 180px; border-color: var(--brand-orange); animation: map-pulse 4.8s ease-in-out infinite 1.6s; }
+
+  @keyframes map-pulse {
+    0%,
+    100% {
+      opacity: 0.45;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.03);
+    }
+  }
 
   ul {
     position: relative;

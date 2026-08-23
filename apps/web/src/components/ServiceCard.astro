@@ -16,7 +16,7 @@ const cardImageSrc = optimizedImageSrc(cardImage.src);
 const cardImageSrcSet = optimizedImageSrcSet(cardImage.src);
 ---
 
-<article class="service-card">
+<article class="service-card" data-reveal data-reveal-delay={String(index * 70)}>
   <a href={`/${service.slug}`} aria-label={`Conheça o serviço de ${service.title}`}>
     <div class="service-media">
       <img
