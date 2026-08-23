@@ -45,11 +45,11 @@ function caseGallery(
 }
 
 export const states = [
-  { code: "AL", name: "Alagoas", isHeadquarters: false },
-  { code: "CE", name: "Ceará", isHeadquarters: false },
-  { code: "PB", name: "Paraíba", isHeadquarters: false },
-  { code: "PE", name: "Pernambuco", isHeadquarters: true },
-  { code: "RN", name: "Rio Grande do Norte", isHeadquarters: false },
+  { code: "AL", name: "Alagoas", isHeadquarters: false, flag: "/assets/flags/al.svg" },
+  { code: "CE", name: "Ceará", isHeadquarters: false, flag: "/assets/flags/ce.svg" },
+  { code: "PB", name: "Paraíba", isHeadquarters: false, flag: "/assets/flags/pb.svg" },
+  { code: "PE", name: "Pernambuco", isHeadquarters: true, flag: "/assets/flags/pe.svg" },
+  { code: "RN", name: "Rio Grande do Norte", isHeadquarters: false, flag: "/assets/flags/rn.svg" },
 ] satisfies StateCoverage[];
 
 export const siteSettings = {

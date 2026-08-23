@@ -50,6 +50,7 @@ export interface StateCoverage {
   code: "AL" | "CE" | "PB" | "PE" | "RN";
   name: string;
   isHeadquarters: boolean;
+  flag: string;
 }
 
 export interface SocialLink {
