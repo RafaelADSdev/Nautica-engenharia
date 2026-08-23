@@ -60,6 +60,14 @@ const socialImage = image ? new URL(image, canonical).toString() : undefined;
     {socialImage && <meta name="twitter:image" content={socialImage} />}
     <title>{fullTitle}</title>
     {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
+    <noscript>
+      <style>
+        [data-reveal] {
+          opacity: 1;
+          transform: none;
+        }
+      </style>
+    </noscript>
     <slot name="head" />
   </head>
   <body>
@@ -73,7 +81,7 @@ const socialImage = image ? new URL(image, canonical).toString() : undefined;
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       const revealElements = () => {
-        const items = document.querySelectorAll('[data-reveal]');
+        const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
         if (!items.length) return;
 
         if (prefersReducedMotion) {
