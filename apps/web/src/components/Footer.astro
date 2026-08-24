@@ -40,7 +40,6 @@ const logoSrc = optimizedImageSrc('/assets/brand/logo-nautica.png', 320);
   </div>
   <div class="container footer-bottom">
     <span>© {year} {settings.legalName}.</span>
-    <a href={settings.whatsapp.baseUrl} target="_blank" rel="noopener noreferrer">WhatsApp <Icon name="lucide:arrow-up-right" size={15} aria-hidden="true" /></a>
   </div>
 </footer>
 
@@ -102,33 +101,14 @@ const logoSrc = optimizedImageSrc('/assets/brand/logo-nautica.png', 320);
     display: flex;
     min-height: 76px;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
     border-top: 1px solid rgb(255 255 255 / 12%);
     font-size: 0.83rem;
-  }
-
-  .footer-bottom a {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 700;
-    text-decoration: none;
   }
 
   @media (max-width: 820px) {
     .footer-grid {
       grid-template-columns: 1fr;
       gap: 40px;
-    }
-  }
-
-  @media (max-width: 540px) {
-    .footer-bottom {
-      align-items: flex-start;
-      flex-direction: column;
-      justify-content: center;
-      padding-block: 20px;
     }
   }
 </style>
