@@ -45,10 +45,10 @@ function caseGallery(
 }
 
 export const states = [
+  { code: "PE", name: "Pernambuco", isHeadquarters: true, flag: "/assets/flags/pe.svg" },
   { code: "AL", name: "Alagoas", isHeadquarters: false, flag: "/assets/flags/al.svg" },
   { code: "CE", name: "Ceará", isHeadquarters: false, flag: "/assets/flags/ce.svg" },
   { code: "PB", name: "Paraíba", isHeadquarters: false, flag: "/assets/flags/pb.svg" },
-  { code: "PE", name: "Pernambuco", isHeadquarters: true, flag: "/assets/flags/pe.svg" },
   { code: "RN", name: "Rio Grande do Norte", isHeadquarters: false, flag: "/assets/flags/rn.svg" },
 ] satisfies StateCoverage[];
 
@@ -169,7 +169,7 @@ export const homePage = {
       "Nove frentes especializadas para demandas prediais, industriais, hospitalares e comerciais.",
   },
   cases: {
-    eyebrow: "Cases de sucesso",
+    eyebrow: "Casos de sucesso",
     title: "Execução comprovada em diferentes ambientes de operação.",
     description:
       "Conheça parte dos serviços realizados em condomínios, hospitais, indústrias e operações de varejo.",
@@ -185,6 +185,8 @@ export const homePage = {
     title: "Atuação em cinco estados do Nordeste.",
     description:
       "Com sede em Pernambuco, a Náutica também atende Alagoas, Ceará, Paraíba e Rio Grande do Norte.",
+    reachNote:
+      "Atendemos outras regiões mediante comunicação prévia, conforme a operação e o planejamento de cada demanda.",
   },
   finalCta: {
     eyebrow: "Vamos conversar?",
@@ -214,7 +216,7 @@ export const teamMembers = [
     slug: "edson-rodrigues",
     name: "Edson Rodrigues",
     role: "Engenheiro civil",
-    bio: "Engenheiro civil, especialista em Patologia das Construções e com MBA em Planejamento e Controle de Obras.",
+    bio: "Engenheiro civil e técnico de segurança, especialista em Patologia das Construções e com MBA em Planejamento e Controle de Obras.",
     photo: {
       src: "/assets/team/edson-rodrigues.jpg",
       alt: "Edson Rodrigues, engenheiro civil da Náutica Engenharia",
@@ -839,9 +841,9 @@ export const caseCategories = [
   {
     key: "condominios",
     slug: "cases-condominios",
-    title: "Cases de sucesso em condomínios",
+    title: "Casos de sucesso em condomínios",
     shortTitle: "Condomínios",
-    eyebrow: "Cases de sucesso",
+    eyebrow: "Casos de sucesso",
     description:
       "Obras voltadas à segurança, à modernização e à valorização dos espaços comuns de edifícios residenciais.",
     result:
@@ -896,7 +898,7 @@ export const caseCategories = [
     whatsappMessage:
       "Olá! Gostaria de conversar sobre um serviço de engenharia para condomínio.",
     seo: {
-      title: "Cases em Condomínios | Náutica Engenharia",
+      title: "Casos em Condomínios | Náutica Engenharia",
       description:
         "Obras de recuperação estrutural, revitalização de fachadas e modernização de áreas comuns em condomínios.",
       image: "/assets/cases/condominios/hero.jpg",
@@ -905,9 +907,9 @@ export const caseCategories = [
   {
     key: "hospitais",
     slug: "cases-hospitais",
-    title: "Cases de sucesso em hospitais",
+    title: "Casos de sucesso em hospitais",
     shortTitle: "Hospitais",
-    eyebrow: "Cases de sucesso",
+    eyebrow: "Casos de sucesso",
     description:
       "Serviços realizados em ambientes hospitalares, com atenção à segurança, à qualidade e aos prazos de execução.",
     result:
@@ -973,7 +975,7 @@ export const caseCategories = [
     whatsappMessage:
       "Olá! Gostaria de conversar sobre um serviço de engenharia para ambiente hospitalar.",
     seo: {
-      title: "Cases em Hospitais | Náutica Engenharia",
+      title: "Casos em Hospitais | Náutica Engenharia",
       description:
         "Serviços de fachadas, impermeabilização, estruturas metálicas, drywall, ancoragem e reformas em ambientes hospitalares.",
       image: "/assets/cases/hospitais/hero.jpg",
@@ -982,9 +984,9 @@ export const caseCategories = [
   {
     key: "industria",
     slug: "cases-industria",
-    title: "Cases de sucesso na indústria",
+    title: "Casos de sucesso na indústria",
     shortTitle: "Indústria",
-    eyebrow: "Cases de sucesso",
+    eyebrow: "Casos de sucesso",
     description:
       "Obras executadas para Tecon Suape, Copa Energia e Petrobras em diferentes ambientes de operação industrial.",
     result:
@@ -1042,7 +1044,7 @@ export const caseCategories = [
     whatsappMessage:
       "Olá! Gostaria de conversar sobre uma obra ou serviço de engenharia industrial.",
     seo: {
-      title: "Cases na Indústria | Náutica Engenharia",
+      title: "Casos na Indústria | Náutica Engenharia",
       description:
         "Obras civis, estruturas metálicas, recuperação estrutural, impermeabilização e proteção perimetral em operações industriais.",
       image: "/assets/cases/industria/hero.jpg",
@@ -1051,9 +1053,9 @@ export const caseCategories = [
   {
     key: "varejo",
     slug: "cases-varejo",
-    title: "Cases de sucesso no varejo",
+    title: "Casos de sucesso no varejo",
     shortTitle: "Varejo",
-    eyebrow: "Cases de sucesso",
+    eyebrow: "Casos de sucesso",
     description:
       "Projetos para redes varejistas e centros comerciais, abrangendo construção, retrofit, manutenção e acabamentos.",
     result:
@@ -1130,7 +1132,7 @@ export const caseCategories = [
     whatsappMessage:
       "Olá! Gostaria de conversar sobre uma obra ou manutenção para uma operação de varejo.",
     seo: {
-      title: "Cases no Varejo | Náutica Engenharia",
+      title: "Casos no Varejo | Náutica Engenharia",
       description:
         "Obras, retrofit, manutenção, revestimentos, drywall, pintura e avaliações estruturais para redes e centros comerciais.",
       image: "/assets/cases/varejo/hero.jpg",

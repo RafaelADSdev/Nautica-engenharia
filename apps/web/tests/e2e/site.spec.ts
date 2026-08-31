@@ -77,20 +77,42 @@ for (const viewport of viewports) {
 
       const partnerCards = page.locator('[data-partner-card]');
       await expect(partnerCards).toHaveCount(25);
-      await page.getByRole('button', { name: /^Varejo$/i }).click();
 
-      const visibleCategories = await partnerCards.evaluateAll((cards) =>
-        cards
-          .filter((card) => !card.hasAttribute('hidden') && getComputedStyle(card).display !== 'none')
-          .map((card) => card.getAttribute('data-category')),
-      );
+      if (viewport.width <= 640) {
+        await expect(page.locator('[data-partner-filters]')).toBeHidden();
+        const visibleOnPhone = await partnerCards.evaluateAll(
+          (cards) =>
+            cards.filter(
+              (card) => !card.hasAttribute('hidden') && getComputedStyle(card).display !== 'none',
+            ).length,
+        );
+        expect(visibleOnPhone).toBe(25);
+      } else {
+        await page.getByRole('button', { name: /^Varejo$/i }).click();
 
-      expect(visibleCategories).toHaveLength(7);
-      expect(new Set(visibleCategories)).toEqual(new Set(['varejo']));
-      await expect(page.getByRole('button', { name: /^Varejo$/i })).toHaveAttribute(
-        'aria-pressed',
-        'true',
-      );
+        await expect
+          .poll(async () =>
+            partnerCards.evaluateAll(
+              (items) =>
+                items.filter(
+                  (card) => !card.hasAttribute('hidden') && getComputedStyle(card).display !== 'none',
+                ).length,
+            ),
+          )
+          .toBe(7);
+
+        const visibleCategories = await partnerCards.evaluateAll((items) =>
+          items
+            .filter((card) => !card.hasAttribute('hidden') && getComputedStyle(card).display !== 'none')
+            .map((card) => card.getAttribute('data-category')),
+        );
+
+        expect(new Set(visibleCategories)).toEqual(new Set(['varejo']));
+        await expect(page.getByRole('button', { name: /^Varejo$/i })).toHaveAttribute(
+          'aria-pressed',
+          'true',
+        );
+      }
 
       await expectNoHorizontalOverflow(page);
     });

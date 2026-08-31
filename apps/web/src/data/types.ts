@@ -137,6 +137,7 @@ export interface HomePageContent {
     eyebrow: string;
     title: string;
     description: string;
+    reachNote: string;
   };
   finalCta: {
     eyebrow: string;

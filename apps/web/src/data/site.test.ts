@@ -5,6 +5,7 @@ import {
   legalPages,
   partners,
   services,
+  states,
   teamMembers,
 } from './site';
 
@@ -43,6 +44,11 @@ describe('inventário editorial', () => {
   it('mantém 25 parceiros e dois integrantes da equipe', () => {
     expect(partners).toHaveLength(25);
     expect(teamMembers).toHaveLength(2);
+    expect(teamMembers[1]?.bio.toLocaleLowerCase('pt-BR')).toContain('técnico de segurança');
+  });
+
+  it('lista Pernambuco primeiro na cobertura regional', () => {
+    expect(states[0]).toMatchObject({ code: 'PE', isHeadquarters: true });
   });
 
   it('mantém as duas páginas legais', () => {

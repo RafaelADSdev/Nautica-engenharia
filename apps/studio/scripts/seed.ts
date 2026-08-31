@@ -71,7 +71,7 @@ if (!APPLY) {
   console.info(
     [
       "Pré-validação do seed concluída (nenhuma alteração remota foi feita).",
-      `9 serviços, ${caseCategories.reduce((total, item) => total + item.cases.length, 0)} cases, 25 parceiros, 2 integrantes e 2 páginas legais.`,
+      `9 serviços, ${caseCategories.reduce((total, item) => total + item.cases.length, 0)} casos, 25 parceiros, 2 integrantes e 2 páginas legais.`,
       `${allAssetPaths.size} arquivos de imagem prontos para envio.`,
       "Para importar: configure as variáveis documentadas e execute pnpm --filter @nautica/studio seed:apply.",
     ].join("\n"),
@@ -276,6 +276,7 @@ async function buildDocuments(): Promise<SanityDocument[]> {
         ? ["Engenharia Civil", "Marketing", "Especialização em Sistemas de Segurança"]
         : [
             "Engenharia Civil",
+            "Técnico de Segurança",
             "Especialização em Patologia das Construções",
             "MBA em Planejamento e Controle de Obras",
           ];

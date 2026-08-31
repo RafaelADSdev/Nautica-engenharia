@@ -458,7 +458,9 @@ function mapSiteSettings(raw: RawSiteSettings | undefined): SiteSettings {
       state,
       formatted: `${street} — ${city}, ${state}`,
     },
-    states: states.length > 0 ? states : localSiteSettings.states,
+    states: (states.length > 0 ? states : localSiteSettings.states)
+      .slice()
+      .sort((left, right) => Number(right.isHeadquarters) - Number(left.isHeadquarters)),
     socialLinks:
       socialLinks.length > 0 ? socialLinks : localSiteSettings.socialLinks,
     defaultSeo: seoOrFallback(raw.defaultSeo, localSiteSettings.defaultSeo),

@@ -21,7 +21,7 @@ const breadcrumbSchema = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://www.nauticaengenharia.com/' },
-    { '@type': 'ListItem', position: 2, name: 'Cases', item: 'https://www.nauticaengenharia.com/#cases' },
+    { '@type': 'ListItem', position: 2, name: 'Casos', item: 'https://www.nauticaengenharia.com/#cases' },
     { '@type': 'ListItem', position: 3, name: category.title, item: canonicalUrl },
   ],
 };
@@ -45,7 +45,7 @@ const breadcrumbSchema = {
     ctaLabel="Conversar sobre uma obra"
     breadcrumbs={[
       { label: 'Início', href: '/' },
-      { label: 'Cases', href: '/#cases' },
+      { label: 'Casos', href: '/#cases' },
       { label: category.shortTitle },
     ]}
   />
@@ -89,18 +89,18 @@ const breadcrumbSchema = {
     </div>
   </section>
 
-  <GalleryLightbox images={category.gallery} title={`Registros de cases em ${category.shortTitle.toLocaleLowerCase('pt-BR')}`} eyebrow="Portfólio visual" />
+  <GalleryLightbox images={category.gallery} title={`Registros de casos em ${category.shortTitle.toLocaleLowerCase('pt-BR')}`} eyebrow="Portfólio visual" />
 
   <section class="section more-cases" aria-labelledby="more-cases-title">
     <div class="container">
       <div class="section-heading">
         <div>
           <span class="eyebrow">Outros segmentos</span>
-          <h2 id="more-cases-title">Explore mais cases</h2>
+          <h2 id="more-cases-title">Explore mais casos</h2>
         </div>
         <p>Conheça a atuação da Náutica em outros ambientes e tipos de operação.</p>
       </div>
-      <nav class="case-nav" aria-label="Categorias de cases">
+      <nav class="case-nav" aria-label="Categorias de casos">
         {categories.map((item) => (
           <a href={`/${item.slug}`} aria-current={item.slug === category.slug ? 'page' : undefined}>
             <Icon name={item.icon} size={23} aria-hidden="true" />

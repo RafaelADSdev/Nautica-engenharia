@@ -58,25 +58,140 @@ const filters = [
   const filterGroup = document.querySelector('[data-partner-filters]');
   const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-partner-card]'));
   const status = document.querySelector('[data-partner-status]');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const phoneQuery = window.matchMedia('(max-width: 640px)');
+  const easeOut = 'cubic-bezier(0.16, 1, 0.3, 1)';
+  const easeIn = 'cubic-bezier(0.4, 0, 1, 1)';
+  let filterToken = 0;
 
-  filterGroup?.addEventListener('click', (event) => {
-    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('button[data-filter]');
-    if (!button || !filterGroup.contains(button)) return;
+  const matchesFilter = (card: HTMLElement, filter: string) =>
+    filter === 'all' || card.dataset.category === filter;
 
-    const filter = button.dataset.filter ?? 'all';
-    filterGroup.querySelectorAll('button').forEach((candidate) => {
-      candidate.setAttribute('aria-pressed', String(candidate === button));
+  const play = (element: HTMLElement, keyframes: Keyframe[], options: KeyframeAnimationOptions) =>
+    element.animate(keyframes, options).finished.catch(() => undefined);
+
+  const updateStatus = (visible: number) => {
+    if (status) {
+      status.textContent = `${visible} ${visible === 1 ? 'parceiro exibido' : 'parceiros exibidos'}`;
+    }
+  };
+
+  const setPressed = (filter: string) => {
+    filterGroup?.querySelectorAll('button[data-filter]').forEach((candidate) => {
+      candidate.setAttribute('aria-pressed', String(candidate.getAttribute('data-filter') === filter));
+    });
+  };
+
+  const applyInstant = (filter: string) => {
+    let visible = 0;
+    cards.forEach((card) => {
+      card.getAnimations().forEach((animation) => animation.cancel());
+      card.style.removeProperty('opacity');
+      card.style.removeProperty('transform');
+      card.style.removeProperty('filter');
+      const visibleCard = matchesFilter(card, filter);
+      card.hidden = !visibleCard;
+      if (visibleCard) visible += 1;
+    });
+    updateStatus(visible);
+  };
+
+  const applyFilter = async (filter: string) => {
+    const token = ++filterToken;
+
+    if (reduceMotion.matches) {
+      applyInstant(filter);
+      return;
+    }
+
+    const firstRects = new Map(cards.map((card) => [card, card.getBoundingClientRect()]));
+    const leaving = cards.filter((card) => !matchesFilter(card, filter) && !card.hidden);
+    const entering = cards.filter((card) => matchesFilter(card, filter) && card.hidden);
+
+    if (leaving.length > 0) {
+      await Promise.all(
+        leaving.map((card) =>
+          play(
+            card,
+            [
+              { opacity: 1, transform: 'scale(1)', filter: 'blur(0px)' },
+              { opacity: 0, transform: 'scale(0.92) translateY(10px)', filter: 'blur(8px)' },
+            ],
+            { duration: 220, easing: easeIn, fill: 'forwards' },
+          ),
+        ),
+      );
+    }
+
+    if (token !== filterToken) return;
+
+    leaving.forEach((card) => {
+      card.getAnimations().forEach((animation) => animation.cancel());
+      card.hidden = true;
+    });
+    entering.forEach((card) => {
+      card.hidden = false;
+      card.style.opacity = '0';
     });
 
     let visible = 0;
     cards.forEach((card) => {
-      const matches = filter === 'all' || card.dataset.category === filter;
-      card.hidden = !matches;
-      if (matches) visible += 1;
+      if (card.hidden) return;
+      visible += 1;
+      const previous = firstRects.get(card);
+      const next = card.getBoundingClientRect();
+
+      if (entering.includes(card)) {
+        card.style.removeProperty('opacity');
+        void play(
+          card,
+          [
+            { opacity: 0, transform: 'scale(0.92) translateY(14px)', filter: 'blur(8px)' },
+            { opacity: 1, transform: 'scale(1) translateY(0)', filter: 'blur(0px)' },
+          ],
+          { duration: 420, easing: easeOut },
+        );
+        return;
+      }
+
+      if (!previous) return;
+      const dx = previous.left - next.left;
+      const dy = previous.top - next.top;
+      if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+
+      void play(
+        card,
+        [{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'translate(0, 0)' }],
+        { duration: 480, easing: easeOut },
+      );
     });
 
-    if (status) status.textContent = `${visible} ${visible === 1 ? 'parceiro exibido' : 'parceiros exibidos'}`;
+    updateStatus(visible);
+  };
+
+  const syncPhoneFilters = () => {
+    if (phoneQuery.matches) {
+      setPressed('all');
+      applyInstant('all');
+      filterGroup?.setAttribute('aria-hidden', 'true');
+      return;
+    }
+
+    filterGroup?.removeAttribute('aria-hidden');
+  };
+
+  filterGroup?.addEventListener('click', (event) => {
+    if (phoneQuery.matches) return;
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('button[data-filter]');
+    if (!button || !filterGroup.contains(button)) return;
+
+    const filter = button.dataset.filter ?? 'all';
+    setPressed(filter);
+    void applyFilter(filter);
   });
+
+  phoneQuery.addEventListener('change', syncPhoneFilters);
+  syncPhoneFilters();
 </script>
 
 <style>
@@ -146,7 +261,11 @@ const filters = [
     cursor: pointer;
     font-size: 0.78rem;
     font-weight: 800;
-    transition: background var(--transition), border-color var(--transition), transform var(--transition);
+    transition:
+      background 280ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 280ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 280ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .partner-filters button:hover {
@@ -157,6 +276,7 @@ const filters = [
   .partner-filters button[aria-pressed='true'] {
     border-color: var(--brand-orange-dark);
     background: var(--brand-orange-dark);
+    box-shadow: 0 10px 24px rgb(240 92 54 / 28%);
   }
 
   .partner-grid {
@@ -177,8 +297,9 @@ const filters = [
     color: var(--graphite);
     background: var(--white);
     box-shadow: 0 12px 34px rgb(0 0 0 / 10%);
+    transform-origin: center;
     transition:
-      transform var(--transition),
+      transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
       border-color var(--transition),
       box-shadow var(--transition);
   }
@@ -239,14 +360,7 @@ const filters = [
 
   @media (max-width: 640px) {
     .partner-filters {
-      flex-wrap: nowrap;
-      padding-bottom: 8px;
-      overflow-x: auto;
-      scrollbar-width: thin;
-    }
-
-    .partner-filters button {
-      flex: 0 0 auto;
+      display: none;
     }
 
     .partner-grid {

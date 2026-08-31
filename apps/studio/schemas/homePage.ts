@@ -139,7 +139,7 @@ export const homePage = defineType({
     }),
     defineField({
       name: 'caseCategoryCards',
-      title: 'Categorias de cases',
+      title: 'Categorias de casos',
       type: 'array',
       group: 'content',
       of: [
@@ -266,7 +266,7 @@ export const homePage = defineType({
               {title: 'Quem somos', value: 'about'},
               {title: 'Equipe', value: 'team'},
               {title: 'Serviços', value: 'services'},
-              {title: 'Cases', value: 'cases'},
+              {title: 'Casos', value: 'cases'},
               {title: 'Parceiros', value: 'partners'},
               {title: 'Cobertura regional', value: 'coverage'},
               {title: 'Chamada final', value: 'finalCta'},

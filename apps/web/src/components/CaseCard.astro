@@ -15,7 +15,7 @@ const heroSrcSet = optimizedImageSrcSet(category.heroImage.src);
 ---
 
 <article class:list={['case-card', { 'case-card--featured': featured }]} data-reveal data-reveal-delay={String(revealDelay)}>
-  <a href={`/${category.slug}`} aria-label={`Conheça os cases de ${category.shortTitle}`}>
+  <a href={`/${category.slug}`} aria-label={`Conheça os casos de ${category.shortTitle}`}>
     <img
       src={heroSrc}
       srcset={heroSrcSet}
@@ -30,7 +30,7 @@ const heroSrcSet = optimizedImageSrcSet(category.heroImage.src);
     <div class="case-copy">
       <span class="case-icon"><Icon name={category.icon} size={24} aria-hidden="true" /></span>
       <div>
-        <span class="case-kicker">Cases</span>
+        <span class="case-kicker">Casos</span>
         <h3>{category.shortTitle}</h3>
         <p>{category.description}</p>
       </div>

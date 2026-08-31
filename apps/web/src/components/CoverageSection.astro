@@ -17,7 +17,10 @@ const { content = localHomePage, states = localStates } = Astro.props;
       <span class="eyebrow">{content.coverage.eyebrow}</span>
       <h2 id="coverage-title">{content.coverage.title}</h2>
       <p>{content.coverage.description}</p>
-      <div class="hq-note"><Icon name="lucide:building-2" size={20} aria-hidden="true" /><span><strong>Sede em Recife</strong> — atendimento regional planejado conforme cada operação.</span></div>
+      <div class="coverage-notes">
+        <div class="hq-note"><Icon name="lucide:building-2" size={20} aria-hidden="true" /><span><strong>Sede em Recife</strong> — atendimento regional planejado conforme cada operação.</span></div>
+        <div class="hq-note"><Icon name="lucide:map-pin" size={20} aria-hidden="true" /><span>{content.coverage.reachNote}</span></div>
+      </div>
     </div>
 
     <div class="coverage-map" aria-label="Estados atendidos pela Náutica Engenharia" data-reveal="left" data-reveal-delay="140">
@@ -58,11 +61,16 @@ const { content = localHomePage, states = localStates } = Astro.props;
     color: var(--ink-muted);
   }
 
+  .coverage-notes {
+    display: grid;
+    gap: 12px;
+    margin-top: 30px;
+  }
+
   .hq-note {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 13px;
-    margin-top: 30px;
     padding: 20px;
     border-left: 4px solid var(--brand-orange-dark);
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
